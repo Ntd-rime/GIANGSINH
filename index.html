@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Merry Christmas 🎄</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* Cây thông */
+        .tree {
+            position: relative;
+            width: 0;
+            height: 0;
+            margin: 0 auto;
+        }
+
+        .layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 120px solid transparent;
+            border-right: 120px solid transparent;
+            border-bottom: 140px solid #0f8f3c;
+        }
+
+        .layer:nth-child(1) { top: 0; }
+        .layer:nth-child(2) {
+            top: 80px;
+            border-left-width: 150px;
+            border-right-width: 150px;
+            border-bottom-width: 170px;
+        }
+        .layer:nth-child(3) {
+            top: 180px;
+            border-left-width: 180px;
+            border-right-width: 180px;
+            border-bottom-width: 200px;
+        }
+
+        .trunk {
+            position: absolute;
+            top: 360px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 70px;
+            background: #6b3e26;
+        }
+
+        /* Ngôi sao */
+        .star {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: gold;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px gold; }
+            to { text-shadow: 0 0 20px gold; }
+        }
+
+        /* Tuyết rơi */
+        .snow {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 14px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎄 Merry Christmas 🎄</h1>
+    <p>Chúc bạn một mùa Giáng Sinh an lành và hạnh phúc!</p>
+
+    <div class="tree">
+        <div class="star">⭐</div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="layer"></div>
+        <div class="trunk"></div>
+    </div>
+</div>
+
+<script>
+    // Tạo tuyết rơi
+    for (let i = 0; i < 50; i++) {
+        let snow = document.createElement("div");
+        snow.className = "snow";
+        snow.innerHTML = "❄";
+        snow.style.left = Math.random() * 100 + "vw";
+        snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        snow.style.fontSize = (Math.random() * 10 + 10) + "px";
+        document.body.appendChild(snow);
+    }
+</script>
+
+</body>
+</html>
