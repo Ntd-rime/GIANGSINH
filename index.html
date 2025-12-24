@@ -1,173 +1,175 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Merry Christmas 🎄</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Merry Christmas ✨</title>
 
-<style>
-body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle at top, #1b2735, #090a0f);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
-    overflow: hidden;
-}
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: black;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Segoe UI", sans-serif;
+      }
 
-.container {
-    text-align: center;
-}
+      h1 {
+        text-align: center;
+        color: gold;
+        letter-spacing: 6px;
+        margin-top: 20px;
+        font-size: 44px;
+      }
 
-h1 {
-    font-size: 48px;
-    margin-bottom: 10px;
-}
+      canvas {
+        display: block;
+        margin: auto;
+      }
 
-p {
-    font-size: 20px;
-    margin-bottom: 30px;
-}
+      /* ❄ Tuyết */
+      .snow {
+        position: absolute;
+        top: -10px;
+        color: white;
+        animation: fall linear infinite;
+      }
 
-/* Cây thông */
-.tree {
-    position: relative;
-    width: 300px;
-    height: 420px;
-    margin: auto;
-}
+      @keyframes fall {
+        to {
+          transform: translateY(110vh);
+        }
+      }
+    </style>
+  </head>
 
-/* Ngôi sao */
-.star {
-    position: absolute;
-    top: -45px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 42px;
-    color: gold;
-    animation: starGlow 1.5s infinite alternate;
-}
+  <body>
+    <h1>MERRY CHRISTMAS</h1>
+    <canvas id="tree"></canvas>
 
-@keyframes starGlow {
-    from { text-shadow: 0 0 5px gold; }
-    to { text-shadow: 0 0 25px gold; }
-}
+    <script>
+      /* ===== CANVAS ===== */
+      const canvas = document.getElementById("tree");
+      const ctx = canvas.getContext("2d");
 
-/* Các tầng lá */
-.layer {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: solid transparent;
-    border-right: solid transparent;
-    border-bottom: solid #0f9d58;
-}
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-.layer1 {
-    top: 0;
-    border-left-width: 90px;
-    border-right-width: 90px;
-    border-bottom-width: 110px;
-}
+      const cx = canvas.width / 2;
+      const topY = 160;
+      const treeHeight = 520;
+      const baseWidth = 480; // 🌲 thân to
+      const particles = [];
 
-.layer2 {
-    top: 80px;
-    border-left-width: 120px;
-    border-right-width: 120px;
-    border-bottom-width: 140px;
-}
+      const colors = ["#ffffff", "#ffe066", "#ff9ff3", "#74b9ff"];
 
-.layer3 {
-    top: 170px;
-    border-left-width: 150px;
-    border-right-width: 150px;
-    border-bottom-width: 170px;
-}
+      /* ===== VẼ SAO NHỎ ===== */
+      function drawStarParticle(x, y, r, color, alpha) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = r * 0.6;
+        ctx.shadowBlur = r * 8;
+        ctx.shadowColor = color;
 
-/* Thân cây */
-.trunk {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 70px;
-    background: #6b3e26;
-    border-radius: 5px;
-}
+        ctx.beginPath();
+        ctx.moveTo(-r, 0);
+        ctx.lineTo(r, 0);
+        ctx.moveTo(0, -r);
+        ctx.lineTo(0, r);
+        ctx.stroke();
 
-/* Quả châu */
-.ball {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    animation: blink 2s infinite;
-}
+        ctx.restore();
+      }
 
-.red { background: #e74c3c; }
-.yellow { background: #f1c40f; }
-.blue { background: #3498db; }
+      /* ===== TẠO ĐỐM ===== */
+      for (let i = 0; i < 2200; i++) {
+        const yRatio = Math.random();
+        const width = yRatio * baseWidth;
 
-@keyframes blink {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
+        const isStar = Math.random() < 0.45; // ⭐ gần nửa là sao
+        const size = isStar ? Math.random() * 3 + 2 : Math.random() * 2 + 1;
 
-/* Tuyết */
-.snow {
-    position: absolute;
-    top: -10px;
-    color: white;
-    font-size: 12px;
-    animation: fall linear infinite;
-}
+        particles.push({
+          x: cx + (Math.random() * width - width / 2),
+          y: topY + yRatio * treeHeight,
+          r: size,
+          star: isStar,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 0.01 + 0.003,
+        });
+      }
 
-@keyframes fall {
-    to { transform: translateY(110vh); }
-}
-</style>
-</head>
+      /* ⭐ SAO ĐỈNH CÂY */
+      function drawTopStar() {
+        ctx.save();
+        ctx.translate(cx, topY - 30);
+        ctx.fillStyle = "gold";
+        ctx.shadowBlur = 50;
+        ctx.shadowColor = "gold";
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(
+            Math.cos(((18 + i * 72) * Math.PI) / 180) * 22,
+            -Math.sin(((18 + i * 72) * Math.PI) / 180) * 22
+          );
+          ctx.lineTo(
+            Math.cos(((54 + i * 72) * Math.PI) / 180) * 9,
+            -Math.sin(((54 + i * 72) * Math.PI) / 180) * 9
+          );
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
 
-<body>
+      /* 🎄 ANIMATION */
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-<div class="container">
-    <h1>🎄 Merry Christmas 🎄</h1>
-    <p>Chúc bạn mùa Giáng Sinh an lành & hạnh phúc</p>
+        drawTopStar();
 
-    <div class="tree">
-        <div class="star">⭐</div>
+        particles.forEach((p) => {
+          p.alpha += p.speed;
+          if (p.alpha > 1 || p.alpha < 0.15) p.speed *= -1;
 
-        <div class="layer layer1"></div>
-        <div class="layer layer2"></div>
-        <div class="layer layer3"></div>
+          if (p.star) {
+            drawStarParticle(p.x, p.y, p.r, p.color, p.alpha);
+          } else {
+            ctx.beginPath();
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = p.r * 6;
+            ctx.shadowColor = p.color;
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
 
-        <!-- Quả châu -->
-        <div class="ball red" style="top:60px; left:140px"></div>
-        <div class="ball yellow" style="top:110px; left:90px"></div>
-        <div class="ball blue" style="top:130px; left:180px"></div>
-        <div class="ball red" style="top:190px; left:120px"></div>
-        <div class="ball yellow" style="top:210px; left:200px"></div>
-        <div class="ball blue" style="top:250px; left:150px"></div>
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(animate);
+      }
 
-        <div class="trunk"></div>
-    </div>
-</div>
+      animate();
 
-<script>
-// Tuyết rơi
-for (let i = 0; i < 60; i++) {
-    let snow = document.createElement("div");
-    snow.className = "snow";
-    snow.innerHTML = "❄";
-    snow.style.left = Math.random() * 100 + "vw";
-    snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
-    snow.style.fontSize = (Math.random() * 10 + 10) + "px";
-    document.body.appendChild(snow);
-}
-</script>
+      /* ❄ TUYẾT */
+      for (let i = 0; i < 50; i++) {
+        const snow = document.createElement("div");
+        snow.className = "snow";
+        snow.innerHTML = "❄";
+        snow.style.left = Math.random() * 100 + "vw";
+        snow.style.fontSize = Math.random() * 10 + 10 + "px";
+        snow.style.animationDuration = Math.random() * 3 + 2 + "s";
+        document.body.appendChild(snow);
+      }
 
-</body>
+      window.onresize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+    </script>
+  </body>
 </html>
